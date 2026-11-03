@@ -1881,7 +1881,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `targets` _[ConditionalModelTarget](#conditionalmodeltarget) array_ | Concrete model targets evaluated in order. The first matching condition is<br />selected. One final target may omit when to act as the fallback. |  | MaxItems: 64 <br />MinItems: 1 <br />Required: \{\} <br /> |
+| `targets` _[ConditionalModelTarget](#conditionalmodeltarget) array_ | Model targets evaluated in order. The first matching condition is<br />selected. One final target may omit when to act as the fallback. Targets<br />may be concrete or virtual models. |  | MaxItems: 64 <br />MinItems: 1 <br />Required: \{\} <br /> |
 
 
 #### ConditionalModelTarget
@@ -2589,6 +2589,27 @@ _Appears in:_
 | `http2KeepaliveTimeout` _[Duration](#duration)_ | Time to wait for a response to an `HTTP/2` keepalive ping before the connection is closed.<br />Only applies when `http2KeepaliveInterval` is set. |  | MaxLength: 32 <br />Pattern: `^([0-9]\{1,5\}(h\|m\|s\|ms))\{1,4\}$` <br />Type: string <br />Optional: \{\} <br /> |
 | `maxConnectionDuration` _[Duration](#duration)_ | Maximum time a connection is allowed to remain open.<br />After this duration, the connection is gracefully closed after the current in-flight request completes.<br />Useful for ensuring even traffic distribution behind load balancers during scaling events. |  | MaxLength: 32 <br />Pattern: `^([0-9]\{1,5\}(h\|m\|s\|ms))\{1,4\}$` <br />Type: string <br />Optional: \{\} <br /> |
 | `maxConcurrentRequests` _integer_ | Maximum number of in-flight HTTP requests across this gateway/port.<br />This includes HTTP/1 requests and HTTP/2 streams. Requests over the limit<br />are rejected immediately with a 503 response. Unset means unlimited. |  | Minimum: 1 <br />Optional: \{\} <br /> |
+| `normalize` _[FrontendHTTPNormalize](#frontendhttpnormalize) array_ | `normalize` defines path normalization rules applied before route matching.<br />The normalized path is used for routing, policies and the upstream request;<br />access logs keep the original path. Rules are applied in a fixed order<br />regardless of how they are listed: percent-decoding, then `MergeSlash`,<br />then `DotSegment`.<br />Malformed percent-encoding and `%00` are rejected with 400 whenever any rule<br />other than `MergeSlash` is set.<br />`MergeSlash` collapses repeated slashes into one, treating `\` as `/`.<br />`DotSegment` resolves `.` and `..` segments, treating `%2E` as `.`, `\` as `/`,<br />and ignoring parameters on dot segments (`..;x`).<br />`DecodeUnreserved` decodes percent-encoded unreserved characters (`A-Z a-z 0-9 - . _ ~`).<br />`RejectEscapedSlash` rejects requests whose path contains `%2F` or `%5C` with 400.<br />`UnescapeSlash` decodes `%2F` and `%5C` into `/`. |  | MaxItems: 5 <br />MinItems: 1 <br />Optional: \{\} <br /> |
+
+
+#### FrontendHTTPNormalize
+
+_Underlying type:_ _string_
+
+
+
+
+
+_Appears in:_
+- [FrontendHTTP](#frontendhttp)
+
+| Field | Description |
+| --- | --- |
+| `MergeSlash` |  |
+| `DotSegment` |  |
+| `DecodeUnreserved` |  |
+| `RejectEscapedSlash` |  |
+| `UnescapeSlash` |  |
 
 
 #### FrontendProxyProtocol
@@ -5508,7 +5529,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `targets` _[WeightedModelTarget](#weightedmodeltarget) array_ | Concrete model targets and their relative weights. |  | MaxItems: 64 <br />MinItems: 1 <br />Required: \{\} <br /> |
+| `targets` _[WeightedModelTarget](#weightedmodeltarget) array_ | Model targets and their relative weights. Targets may be concrete or<br />virtual models. |  | MaxItems: 64 <br />MinItems: 1 <br />Required: \{\} <br /> |
 
 
 #### WeightedModelTarget
